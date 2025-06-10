@@ -1,0 +1,5 @@
+chr	pos	ref	alt	hypothesis
+chr2	65502802	G	A	gof
+chr9	21776615	T	G	gof
+chr9	21842300	G	C	lof
+chr8	27337045	A	T	lof
