@@ -1,4 +1,4 @@
-# tfsites.CompareTfSitesAcrossSequences v1
+# tfsites.CompareAcrossSeqsFromGenomicVariants v1
 
 **Author(s):** Joe Solvason  
 
@@ -8,12 +8,12 @@
 
 **Task Type:** Transcription factor analysis
 
-**LSID:**  urn:lsid:genepattern.org:module.analysis:00448
+**LSID:**  urn:lsid:genepattern.org:module.analysis:00479
 
 
 ## Introduction
 
-`tfsites.CompareTfSitesAcrossSequencess` tool fills this need by taking in a multiple sequence alignment of two or more enhancers to map how sequence variation impacts function of TF binding sites. In biomedical applications, comparisons can be made between reference and alternate alleles that are associated with diseases or changes in gene expression. In biomedical applications, `tfsites.CompareTfSitesAcrossSequencess` can be used to determine which binding sites are lost, gained, or changed across genetic variants of enhancers. In evolutionary applications, `tfsites.CompareTfSitesAcrossSequencess` can be used to determine which binding sites are lost, gained, or changed within a particular clade of species.
+`tfsites.CompareAcrossSeqsFromGenomicVariants` tool fills this need by taking in a multiple sequence alignment of two or more enhancers to map how sequence variation impacts function of TF binding sites. In biomedical applications, comparisons can be made between reference and alternate alleles that are associated with diseases or changes in gene expression. In biomedical applications, `tfsites.CompareTfSitesAcrossSequencess` can be used to determine which binding sites are lost, gained, or changed across genetic variants of enhancers. In evolutionary applications, `tfsites.CompareTfSitesAcrossSequencess` can be used to determine which binding sites are lost, gained, or changed within a particular clade of species.
 
  
 ## Methodology

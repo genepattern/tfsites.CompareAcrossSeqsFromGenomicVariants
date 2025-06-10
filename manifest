@@ -1,16 +1,16 @@
-# tfsites.CompareTfSitesAcrossSequences
+# tfsites.CompareAcrossSeqsFromGenomicVariants
 #Mon Aug 21 20:23:30 UTC 2023
 JVMLevel=
-LSID=urn:lsid:genepattern.org:module.analysis:00476
+LSID=urn:lsid:genepattern.org:module.analysis:00479
 author=
 commandLine=python /build/tfsites-webportal/06-compareTfSitesAcrossSequences/06-compareTfSitesAcrossSequences.py -e <enhancer.dna.alignment.table> -g <enhancer.functional.group.table>  <tf.affinity.information> <tf.affinity.files>  <motif.input.file> -b   <minimum.binding.change> -s <minimum.pwm.score> -y <hypothesis> -n <analysis.name> -d .
 cpuType=any
 description=Compares the two seqs and reports the binding site effect on diff seqs
-documentationUrl=https://genepattern.github.io/tfsites.CompareTfSitesAcrossSequences/v1/
+documentationUrl=https://genepattern.github.io/tfsites.CompareAcrossSeqsFromGenomicVariants/v1/
 fileFormat=
-job.docker.image=genepattern/tfsites\:15.8
+job.docker.image=genepattern/tfsites\:16.0
 language=any
-name=tfsites.CompareTfSitesAcrossSequences
+name=tfsites.CompareAcrossSeqsFromGenomicVariants
 os=any
 
 p1_MODE=IN
