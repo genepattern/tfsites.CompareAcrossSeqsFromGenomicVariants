@@ -12,8 +12,7 @@ module: tfsites.CompareAcrossSeqsFromGenomicVariants
 params:
     genome.file: "https://datasets-tfsites-org.s3.us-east-2.amazonaws.com/hosted_data/genomes/binary/hg19.fa.chr2seq.pydict.pickle" 
     variant.file: "data/06-input_law2025_cancer_variants.tsv"
-    tf.affinity.information:  "data/06-input_tf-affinity-info.tsv"
-    tf.affinity.files: "data/06-input_ets1-pbm.tsv"
+    pwm.input:  "data/06-input_pwms-keywords-ETS-ETV-GABP-FLI-SPI.txt"
     window.size: 8
     minimum.binding.change: 0.2
     minimum.pwm.score: 0.8
