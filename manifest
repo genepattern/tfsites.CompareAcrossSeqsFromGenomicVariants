@@ -3,9 +3,9 @@
 JVMLevel=
 LSID=urn:lsid:genepattern.org:module.analysis:00479
 author=
-commandLine=python /build/tfsites-webportal/06-compareTfSitesAcrossSequences/06-compareTfSitesAcrossSequences.py -g <genome.file> -v <variant.file>  <tf.affinity.information> <tf.affinity.files>  <motif.input.file> -m <minimum.binding.change> -s <minimum.pwm.score> -t <pos.index.type> -n <analysis.name> -d .
+commandLine=python /build/tfsites-webportal/06-compareTfSitesAcrossSequencesFromGenomicVariants/06-compareTfSitesAcrossSequencesFromGenomicVariants.py -g <genome.file> -v <variant.file> -w <window.size>  <tf.affinity.information> <tf.affinity.files>  <pwm.input> -m <minimum.binding.change> -s <minimum.pwm.score> -t <pos.index.type> -n <analysis.name> -d .
 cpuType=any
-description=Compares the two seqs and reports the binding site effect on diff seqs
+description=Take in the genomic coordinates of variants to map how ref/alt sequence changes impact the function of TF binding sites. In biomedical applications, comparisons can be made between reference and alternate alleles that are associated with diseases or changes in gene expression.
 documentationUrl=https://genepattern.github.io/tfsites.CompareAcrossSeqsFromGenomicVariants/v1/
 fileFormat=
 job.docker.image=genepattern/tfsites\:16.0
@@ -15,9 +15,9 @@ os=any
 
 p1_MODE=IN
 p1_TYPE=FILE
-p1_default_value=
-p1_description=
-p1_fileFormat=tsv
+p1_default_value=https://datasets-tfsites-org.s3.us-east-2.amazonaws.com/hosted_data/genomes/binary/hg19.fa.chr2seq.pydict.pickle
+p1_description=Pickled genome file that corresponds to the genomic coordinates provided. This is used to extract the sequences to be compared. Some genomes are available on the <a href="https://datasets-tfsites-org.s3.us-east-2.amazonaws.com/index.html?prefix=hosted_data/genomes/binary/">TFSites hosted data S3 bucket.</a>
+p1_fileFormat=pickle;pkl
 p1_flag=
 p1_name=genome.file
 p1_numValues=1..1
@@ -30,7 +30,7 @@ p1_value=
 p2_MODE=IN
 p2_TYPE=FILE
 p2_default_value=
-p2_description=
+p2_description=Tab-separated file containing the list of genomic coordinates to analyze. There should be at least 5 columns in this file, including the chromosome, position, reference allele, alternate + allele, and hypothesis (values can include gof/lof/both/na).
 p2_fileFormat=tsv
 p2_flag=
 p2_name=variant.file
@@ -41,62 +41,65 @@ p2_prefix_when_specified=
 p2_type=java.io.File
 p2_value=
 
-p3_MODE=IN
-p3_TYPE=FILE
-p3_default_value=
-p3_description=File containing all the information for the transcription factors being analyzed, including its name, binding site definition, desired color on the plot, any PBM relative affinity data, and any PFM relative score data.
-p3_fileFormat=tsv
+p3_MODE=
+p3_TYPE=TEXT
+p3_default_value=1
+p3_description=Specify whether position is zero or one indexed.
+p3_fileFormat=
 p3_flag=
-p3_name=tf.affinity.information
-p3_numValues=0..1
-p3_optional=on
+p3_name=pos.index.type
+p3_numValues=1..1
+p3_optional=
 p3_prefix=
-p3_prefix_when_specified= -a
-p3_type=java.io.File
-p3_value=
+p3_prefix_when_specified=
+p3_type=java.lang.String
+p3_value=0;1
 
-p4_MODE=IN
-p4_TYPE=FILE
-p4_default_value=
-p4_description=tf affinity files referenced in the tf affinity information 
-p4_fileFormat=tsv
+
+p4_MODE=
+p4_TYPE=TEXT
+p4_default_value=8
+p4_description=Length of the binding sites that are being analyzed. This will be used to determine the number of nucleotides to include on each side of a variant when extracting the surrounding sequence.
+p4_fileFormat=
 p4_flag=
-p4_name=tf.affinity.files
-p4_numValues=0..99
-p4_optional=on
+p4_name=window.size
+p4_numValues=1..1
+p4_optional=
 p4_prefix=
-p4_prefix_when_specified= -f  
-p4_type=java.io.File
+p4_prefix_when_specified=
+p4_type=java.lang.String
 p4_value=
 
 
 p5_MODE=IN
 p5_TYPE=FILE
 p5_default_value=
-p5_description=JASPAR formatted file with multiple PWMs. You can generate a PWM with the tfsites.GenerateMotifDatabase module.
-p5_fileFormat=JASPAR;tsv
+p5_description=File containing all the information for the transcription factors being analyzed, including its name, binding site definition, desired color on the plot, any PBM relative affinity data, and any PFM relative score data.
+p5_fileFormat=tsv
 p5_flag=
-p5_name=motif.input.file
+p5_name=tf.affinity.information
 p5_numValues=0..1
 p5_optional=on
 p5_prefix=
-p5_prefix_when_specified=-p
+p5_prefix_when_specified= -a
 p5_type=java.io.File
 p5_value=
 
-p6_MODE=
-p6_TYPE=TEXT
-p6_default_value=0.8
-p6_description=minimum pwm score
-p6_fileFormat=
+p6_MODE=IN
+p6_TYPE=FILE
+p6_default_value=
+p6_description=TF affinity files referenced in the tf affinity information 
+p6_fileFormat=tsv
 p6_flag=
-p6_name=minimum.pwm.score
-p6_numValues=0..1
+p6_name=tf.affinity.files
+p6_numValues=0..99
 p6_optional=on
 p6_prefix=
-p6_prefix_when_specified=
-p6_type=java.lang.Float
+p6_prefix_when_specified= -f  
+p6_type=java.io.File
 p6_value=
+
+
 
 p7_MODE=
 p7_TYPE=TEXT
@@ -112,34 +115,48 @@ p7_prefix_when_specified=
 p7_type=java.lang.String
 p7_value=
 
-
 p8_MODE=
 p8_TYPE=TEXT
-p8_default_value=1
-p8_description=
+p8_default_value=0.8
+p8_description=The minimum PWM binding score to predict a site
 p8_fileFormat=
 p8_flag=
-p8_name=pos.index.type
-p8_numValues=1..1
-p8_optional=
+p8_name=minimum.pwm.score
+p8_numValues=0..1
+p8_optional=on
 p8_prefix=
 p8_prefix_when_specified=
-p8_type=java.lang.String
+p8_type=java.lang.Float
 p8_value=
 
-p9_MODE=
-p9_TYPE=TEXT
-p9_default_value=0.1
-p9_description=
-p9_fileFormat=
+
+p9_MODE=IN
+p9_TYPE=FILE
+p9_default_value=
+p9_description=JASPAR formatted file with multiple PWMs. You can generate a PWM with the tfsites.GenerateMotifDatabase module.
+p9_fileFormat=JASPAR;tsv
 p9_flag=
-p9_name=minimum.binding.change
-p9_numValues=1..1
-p9_optional=
+p9_name=pwm.input
+p9_numValues=0..1
+p9_optional=on
 p9_prefix=
-p9_prefix_when_specified=
-p9_type=java.lang.Float
+p9_prefix_when_specified=-p
+p9_type=java.io.File
 p9_value=
+
+p10_MODE=
+p10_TYPE=TEXT
+p10_default_value=0.1
+p10_description=The minimum change of affinity or PWM binding score classify as "increase" or "decrease" in score or affinity.
+p10_fileFormat=
+p10_flag=
+p10_name=minimum.binding.change
+p10_numValues=1..1
+p10_optional=
+p10_prefix=
+p10_prefix_when_specified=
+p10_type=java.lang.Float
+p10_value=
 
 
 
