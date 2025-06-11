@@ -13,7 +13,7 @@
 
 ## Introduction
 
-`tfsites.CompareAcrossSeqsFromGenomicVariants` tool fills this need by taking in a multiple sequence alignment of two or more enhancers to map how sequence variation impacts function of TF binding sites. In biomedical applications, comparisons can be made between reference and alternate alleles that are associated with diseases or changes in gene expression. In biomedical applications, `tfsites.CompareTfSitesAcrossSequencess` can be used to determine which binding sites are lost, gained, or changed across genetic variants of enhancers. In evolutionary applications, `tfsites.CompareTfSitesAcrossSequencess` can be used to determine which binding sites are lost, gained, or changed within a particular clade of species.
+`tfsites.CompareAcrossSeqsFromGenomicVariants` takes in the genomic coordinates of variants to map how ref/alt sequence changes impact the function of TF binding sites. In biomedical applications, comparisons can be made between reference and alternate alleles that are associated with diseases or changes in gene expression. 
 
  
 ## Methodology
@@ -36,36 +36,41 @@ Finally, compare seqs collapses on binding sites that appear in the same locatio
 
 ### Input and Outputs
 
-- **enhancer DNA alignment table data (.tsv)**<span style="color: red;">*</span>
-    - Tab-separated file containing at least two DNA sequences to be analyzed. We suggest only inputting the alignment +/- 15 bp from where the genetic variation of interest occurs. if this is a SNV, you would simply input the 30bp window of the alignment containing the variant. If this is a deletion, you would add 15 bp upstream of the first “-” and 15bp downstream of the last “-”. 
-- **enhancer functional group table (.tsv)**<span style="color: red;">*</span>
-    - Tab-separated file which labels each functional group. Functional group can be either wild-type, control, test, or na. If “na”, all enhancers associated with that label will be removed from the analysis. Binding sites are searched for within the “test” group that are not present within the “wild-type” or “control” group. At a minimum both of these requirements must be met, (1) at least one “control” or “wild-type” must be provided; (2) at least one “test” must be provided.
+- **genome (.pkl)**<span style="color: red;">*</span>
+    - Pickled genome file that corresponds to the genomic coordinates provided. This is used to extract the sequences to be compared.
+
+- **variant file (.tsv)**<span style="color: red;">*</span>
+    - Tab-separated file containing the list of genomic coordinates to analyze. There should be at least 5 columns in this file, including the chromosome, position, reference allele, alternate + allele, and hypothesis (values can include gof/lof/both/na).
 
 <span style="color: red;">*</span>**Either tf affinity information (.tsv) or motif input file (JASPAR format) or both must be provided.**
 
 - **tf affinity information (.tsv)**
     -   File containing  all the information for the transcription factors being analyzed, including its name, binding site definition, desired color on the plot, any PBM relative affinity data, and any PFM relative score data. 
-- **motif input file (JASPAR format)**
-    - JASPAR formatted file with multiple motifs. These can be PFMs as counts or fractions, or PWMs.
+- **pwm input (JASPAR format)**
+    - JASPAR formatted file with multiple motifs. These can be PFMs as counts or fractions, or PWMs. You can generate a PWM with the tfsites.GenerateMotifDatabase module.
 
 ### Other Parameters
 
 - **analysis name**<span style="color: red;">*</span>
     - Name of the analysis. Used as the prefix of all output filenames.
-- **hypothesis**<span style="color: red;">*</span>
-    - In the genetic variant do you expect a gain of a site, loss of a site, or would you like to search for both? Default is "Both".
+- **pos index type**<span style="color: red;">*</span>
+    - Specify whether position is zero or one indexed.
+- **window size (int)**<span style="color: red;">*</span>
+    - 	Length of the binding sites that are being analyzed. This will be used to determine the number of nucleotides to include on each side of a variant when extracting the surrounding sequence.
+- **minimum pwm score (float)**
+    - The minimum PWM binding score to predict a site
 - **minimum binding change (float)**<span style="color: red;">*</span>
     - The minimum change of affinity or PWM binding score classify as “increase” or “decrease” in score or affinity. Default is 0.1.
 
 
 ## Input Files
  
-1.  enhancer alignment table data (.tsv)
-2.  enhancer functional group table (.tsv)
+1.  genome file (.pkl)
+2.  variant file (.tsv)
 3.  tf affinity information (.tsv)
-4.  motif input file (JASPAR format)     
+4.  pwm input (JASPAR format)     
        
-## Output Files
+## Output Files - NEEDS UPDATING
 
 - **tf affinity information (.tsv)**
     - An output report of the predicted altered binding sites. Each associated PWM or binding affinity data is provided for every sequence variant. HTML reports are separated into ablations (abl), decreases (dec), de novos (dnv) and increases (inc).
@@ -75,7 +80,7 @@ Finally, compare seqs collapses on binding sites that appear in the same locatio
   
 ## Example Data
 
-[Example input data is available on github](https://github.com/genepattern/tfsites.CompareTfSitesAcrossSequences/gpunit/data)
+[Example input data is available on github](https://github.com/genepattern/tfsites.CompareAcrossSeqsFromGenomicVariants/gpunit/data)
     
 ## References
 
