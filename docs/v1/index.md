@@ -1,8 +1,8 @@
 # tfsites.CompareAcrossSeqsFromGenomicVariants v1
 
-**Author(s):** Joe Solvason  
+**Author(s):** Joe Solvason, Maggie Ma
 
-**Contact:** Joe Solvason (solvason@eng.ucsd.edu)
+**Contact:** Joe Solvason (solvason@ucsd.edu)
 
 **Adapted as a GenePattern Module by:** Ted Liefeld (jliefeld@cloud.ucsd.edu)
 
@@ -17,6 +17,8 @@
 
  
 ## Methodology
+
+Reference and alternate sequences will be extracted based on the genomic coordinates provided. The size of the sequence extracted will depend on the window size, which is based on the length of the binding sites being analyzed. Each pair of ref/alt sequences will be analyzed separately. 
 
 Enhancers that will be compared are labeled with groups – wild-type, control and test. Control sequences have sequence variation but have the same function (ie, sequence changes do not alter enhancer activity). Test sequences have sequence variation and drive differential enhancer activity. When a control group is available, it is helpful as it allows you to see which binding sites that uniquely arise in the sequence variants that drive differential expression. Sites that arise in both control and test groups are not as interesting. If a wild-type is provided, the analysis will report how all binding sites relate to the wild-type.
 
@@ -38,44 +40,83 @@ Finally, compare seqs collapses on binding sites that appear in the same locatio
 
 - **genome (.pkl)**<span style="color: red;">*</span>
     - Pickled genome file that corresponds to the genomic coordinates provided. This is used to extract the sequences to be compared.
-
 - **variant file (.tsv)**<span style="color: red;">*</span>
-    - Tab-separated file containing the list of genomic coordinates to analyze. There should be at least 5 columns in this file, including the chromosome, position, reference allele, alternate + allele, and hypothesis (values can include gof/lof/both/na).
+    - Tab-separated file containing the list of genomic coordinates for the variants. 
 
 <span style="color: red;">*</span>**Either tf affinity information (.tsv) or motif input file (JASPAR format) or both must be provided.**
 
 - **tf affinity information (.tsv)**
-    -   File containing  all the information for the transcription factors being analyzed, including its name, binding site definition, desired color on the plot, any PBM relative affinity data, and any PFM relative score data. 
-- **pwm input (JASPAR format)**
-    - JASPAR formatted file with multiple motifs. These can be PFMs as counts or fractions, or PWMs. You can generate a PWM with the tfsites.GenerateMotifDatabase module.
+    -   File containing  all the information for the transcription factors being analyzed, including its name, core site definition, and any PBM relative affinity data (optional).
+- **motif input file (JASPAR format)**
+    - JASPAR formatted file with multiple motifs. These can be PFMs as counts or fractions, or PWMs. You can generate a PWM with the `tfsites.GenerateMotifDatabase` module.
 
 ### Other Parameters
 
 - **analysis name**<span style="color: red;">*</span>
-    - Name of the analysis. Used as the prefix of all output filenames.
-- **pos index type**<span style="color: red;">*</span>
-    - Specify whether position is zero or one indexed.
+    - Name of the analysis. Used as the prefix of all output file names.
+- **position index type (int)**<span style="color: red;">*</span>
+    - Specify whether position coordinates are zero or one indexed.
 - **window size (int)**<span style="color: red;">*</span>
     - 	Length of the binding sites that are being analyzed. This will be used to determine the number of nucleotides to include on each side of a variant when extracting the surrounding sequence.
+- **minimum binding change (float)**
+    - The minimum change of affinity or PWM binding score required to classify an “increase” or “decrease.” Default is `0.1`.
 - **minimum pwm score (float)**
-    - The minimum PWM binding score to predict a site
-- **minimum binding change (float)**<span style="color: red;">*</span>
-    - The minimum change of affinity or PWM binding score classify as “increase” or “decrease” in score or affinity. Default is 0.1.
+    - The minimum PWM binding score required to predict a site. Default is `0.8`.
 
 
 ## Input Files
  
 1.  genome file (.pkl)
+- Contains python dictionary object in the following format: {'chr1':'ACGTATTAGCCTAGAGATCA', ...}    
+  
 2.  variant file (.tsv)
-3.  tf affinity information (.tsv)
-4.  pwm input (JASPAR format)     
-       
-## Output Files - NEEDS UPDATING
+- Assumes header is present
+- Columns:
+    - `Chr:` chromosome
+    - `Pos:` position
+    - `Ref:` reference allele
+    - `Alt:` alternate allele
+    - `Hypothesis`: specify whether gof/lof/both/na
 
-- **tf affinity information (.tsv)**
-    - An output report of the predicted altered binding sites. Each associated PWM or binding affinity data is provided for every sequence variant. HTML reports are separated into ablations (abl), decreases (dec), de novos (dnv) and increases (inc).
-- **altered binding site table (.tsv)**
+```
+Chr     Pos	        Ref	Alt	Hypothesis
+chr2	65502802	G	A	gof
+chr9	21776615	T	G	gof
+chr9	21842300	G	C	lof
+chr8	27337045	A	T	lof
+```
+ 
+3.  tf affinity information (.tsv)
+- Assumes header is present
+- Columns:
+    - `TF Name:` name of the transcription factor
+    - `Core Site:` minimal IUPAC binding site definition for transcription factor 
+    - `Affinity Data (optional):` name of the relative affinity data file
+ 
+```
+TF Name    Core Site    Affinity Data
+ETS        NNGGAWNN     input_ets1-pbm.tsv    
+ETS-only   NNGGAWNN
+```
+  
+4.  motif input file (JASPAR format)
+- Can provide multiple PWMs 
+
+```
+>MA1113.3	PBX2
+A  [  4925  26620    225  24368  27245  27259    704   2298  25945 ]
+C  [ 19645    629    588   2266    574    754    453  23894    848 ]
+G  [  1585   1710    317    817    343    569    327    555    352 ]
+T  [  3441    637  28466   2145   1434   1014  28112   2849   2451 ]
+```
+ 
+       
+## Output Files
+
+- **differential binding sites (.tsv)**
     - This table contains all binding sites with unique IDs (which match those in the HTML report). It also ranks the binding sites by how LOF or GOF they are. Each row is a predicted binding site for a genetic variant, which also contains the calculated binding scores or affinities. 
+- **folders with html reports**
+    - An output report of the predicted altered binding sites. Each associated PWM or binding affinity data is provided for every sequence variant. HTML reports are separated into ablations (abl), decreases (dec), de novos (dnv) and increases (inc).
     
   
 ## Example Data
