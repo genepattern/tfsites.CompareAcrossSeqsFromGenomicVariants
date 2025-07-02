@@ -1,3 +1,5 @@
+#updated after building 0.11
+#Wed, 02 Jul 2025 17:38:47 -0400
 #updated after building 0.10
 #Wed, 02 Jul 2025 17:20:07 -0400
 #updated after building 0.9
@@ -10,4 +12,4 @@
 #Wed, 25 Jun 2025 18:38:21 -0400
 #updated after building 0.5
 #Thu, 12 Jun 2025 10:56:21 -0400
-prerelease.number=11
+prerelease.number=12
