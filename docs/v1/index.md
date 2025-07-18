@@ -46,7 +46,9 @@ Finally, compare seqs collapses on binding sites that appear in the same locatio
 <span style="color: red;">*</span>**Either tf affinity information (.tsv) or motif input file (JASPAR format) or both must be provided.**
 
 - **tf affinity information (.tsv)**
-    -   File containing  all the information for the transcription factors being analyzed, including its name, core site definition, and any PBM relative affinity data (optional).
+    -   File containing  all the information for the transcription factors being analyzed, including its name, core site definition, and any affinity data (optional).
+- **tf affinity files (.tsv)**
+    - Affinity files referenced in tf affinity information. 
 - **motif input file (JASPAR format)**
     - JASPAR formatted file with multiple motifs. These can be PFMs as counts or fractions, or PWMs. You can generate a PWM with the `tfsites.GenerateMotifDatabase` module.
 
@@ -98,8 +100,17 @@ TF Name    Core Site    Affinity Data
 ETS        NNGGAWNN     input_ets1-pbm.tsv    
 ETS-only   NNGGAWNN
 ```
+
+4. tf affinity file (.tsv)
+
+```
+Kmer       Relative Affinity
+AAAAAAAA   0.15
+AAAAAAAC   0.11
+AAAAAAAG   0.13
+```
   
-4.  motif input file (JASPAR format)
+6.  motif input file (JASPAR format)
 - Can provide multiple PWMs 
 
 ```
