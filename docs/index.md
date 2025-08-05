@@ -1,5 +1,5 @@
 
-# tfsites.CompareTfSitesAcrossSequences Genepattern module docs pages root
+# tfsites.CompareAcrossSeqsFromGenomicVariants Genepattern module docs pages root
 
 [v1 initial revision](v1/index.md)
 
