@@ -38,9 +38,9 @@ Finally, compare seqs collapses on binding sites that appear in the same locatio
 
 ### Input and Outputs
 
-- **genome (.pkl)**<span style="color: red;">*</span>
+- <span style="color: red;">*</span>**genome (.pkl)**
     - Pickled genome file that corresponds to the genomic coordinates provided. This is used to extract the sequences to be compared.
-- **variant file (.tsv)**<span style="color: red;">*</span>
+- <span style="color: red;">*</span>**variant file (.tsv)**
     - Tab-separated file containing the list of genomic coordinates for the variants. 
 
 <span style="color: red;">*</span>**Either tf affinity information (.tsv) or motif input file (JASPAR format) or both must be provided.**
@@ -54,11 +54,11 @@ Finally, compare seqs collapses on binding sites that appear in the same locatio
 
 ### Other Parameters
 
-- **analysis name**<span style="color: red;">*</span>
+- <span style="color: red;">*</span>**analysis name**
     - Name of the analysis. Used as the prefix of all output file names.
-- **position index type (int)**<span style="color: red;">*</span>
+- <span style="color: red;">*</span>**position index type (int)**
     - Specify whether position coordinates are zero or one indexed.
-- **window size (int)**<span style="color: red;">*</span>
+- <span style="color: red;">*</span>**window size (int)**
     - 	Length of the binding sites that are being analyzed. This will be used to determine the number of nucleotides to include on each side of a variant when extracting the surrounding sequence.
 - **minimum binding change (float)**
     - The minimum change of affinity or PWM binding score required to classify an “increase” or “decrease.” Default is `0.1`.
