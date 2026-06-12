@@ -203,7 +203,7 @@ p13_value=
 
 p14_MODE=
 p14_TYPE=TEXT
-p14_default_value=False
+p14_default_value=FALSE
 p14_description=Whether to use pseudocounts when generating motif database.
 p14_fileFormat=
 p14_flag=
@@ -213,7 +213,7 @@ p14_optional=on
 p14_prefix=
 p14_prefix_when_specified=--motif_use_pseudocounts  
 p14_type=java.lang.String
-p14_value=True;False
+p14_value=TRUE;FALSE
 
 p15_MODE=
 p15_TYPE=TEXT
